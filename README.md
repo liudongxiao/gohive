@@ -1,7 +1,7 @@
 # go client for hive with session connection pool 
 #usage
 
-``
+```
 package main
 
 import "github.com/liudongxiao/gohive/hive"
