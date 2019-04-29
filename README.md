@@ -4,15 +4,45 @@
 ```
 package main
 
-import "github.com/liudongxiao/gohive/hive"
+import (
+	"fmt"
+	"log"
+	"sunteng/commons/db/hive"
+)
 
 func main() {
-	cfg := &hive.Config{}
-	hcli, err := hive.NewClient(cfg)
-	if err != nil {
-		panic(err)
+	const host = "127.0.0.1:10000"
+	cfg := &hive.Config{
+		Host:      host,
+		BenchSize: 1000,
+		UserName:  "hdfs",
+		Password:  "",
 	}
-	hcli.Execute("select* from table")
+	client, err := hive.NewClient(cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer client.Close()
+ sql:="select id from dsp.dim_ostype limit 1500"
+	result, err := client.ExecuteEx(sql, true)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var id string
+	var ids []string
+
+	for result.NextPage() {
+
+		for result.NextInPage() {
+			result.Scan(&id)
+			ids = append(ids, id)
+		}
+	}
+	if err := result.Err(); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("=======", len(ids))
 
 }
 ```
