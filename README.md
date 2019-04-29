@@ -23,7 +23,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer client.Close()
- sql:="select id from dsp.dim_ostype limit 1500"
+	sql := "select id from dsp.dim_ostype limit 1500"
 	result, err := client.ExecuteEx(sql, true)
 	if err != nil {
 		log.Fatal(err)
@@ -45,4 +45,6 @@ func main() {
 	fmt.Println("=======", len(ids))
 
 }
+
 ```
+#more examples please read the hive client test file
