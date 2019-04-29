@@ -1,5 +1,5 @@
 # go client for hive with session connection pool 
-#usage
+## usage
 
 ```
 package main
@@ -47,4 +47,4 @@ func main() {
 }
 
 ```
-#more examples please read the hive client test file
+## more examples please read the hive client test file
