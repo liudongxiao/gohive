@@ -1,50 +1,40 @@
-# go client for hive with session connection pool 
-## usage
+# Hive go client 说明
 
-```
-package main
+## 代码
 
-import (
-	"fmt"
-	"log"
-	"sunteng/commons/db/hive"
-)
+Hive client 其实是使用 Hive thrift 接口，用 TCLIService.thrift 
 
-func main() {
-	const host = "127.0.0.1:10000"
-	cfg := &hive.Config{
-		Host:      host,
-		BenchSize: 1000,
-		UserName:  "hdfs",
-		Password:  "",
-	}
-	client, err := hive.NewClient(cfg)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer client.Close()
-	sql := "select id from dsp.dim_ostype limit 1500"
-	result, err := client.ExecuteEx(sql, true)
-	if err != nil {
-		log.Fatal(err)
-	}
+tcliservice 目录下面是 TCLIService.thrift 生成的 golang 代码，千万不要手工修改，除非你非常清楚结果
 
-	var id string
-	var ids []string
+## 使用
 
-	for result.NextPage() {
-
-		for result.NextInPage() {
-			result.Scan(&id)
-			ids = append(ids, id)
-		}
-	}
-	if err := result.Err(); err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("=======", len(ids))
-
+```go
+cfg := &Config{
+    Host:      host,
+    UserName:  "root",
 }
 
+client, err := NewClient(cfg)
+if err != nil {
+    t.Fatal(err)
+}
+
+defer client.Close()
+
+// 执行 HQL
+// ExecuteEx(statement, aync)
+result, err := client.ExecuteEx("select country_name from test.Table limit 1500", true)
+if err != nil {
+    t.Fatal(err)
+}
+
+// 获取返回结果
+for result.NextPage() {
+
+    for result.NextInPage() {
+        result.Scan(&id)
+        ids = append(ids, id)
+    }
+}
 ```
-## more examples please read the hive client test file
+
