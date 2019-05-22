@@ -1,5 +1,7 @@
 # Hive go client 说明
 
+# hive go client  带连接池支持
+
 ## 代码
 
 Hive client 其实是使用 Hive thrift 接口，用 TCLIService.thrift 
